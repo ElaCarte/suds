@@ -63,15 +63,11 @@ class MessageContext(Context):
     pass
 
 
-class Request:
+class RequestContext(Context):
     """
-    A transport request
-    @ivar url: The url for the request.
-    @type url: str
-    @ivar message: The message to be sent in a POST request.
-    @type message: str
-    @ivar headers: The http headers to be used for the request.
-    @type headers: dict
+    A context which wraps a transport request
+    @ivar request: The Request object that is about to be sent
+    @type request: Request
     """
     pass
 
@@ -136,18 +132,18 @@ class MessagePlugin(Plugin):
         Provides the plugin with the opportunity to inspect/modify
         the envelope Document before it is sent.
         @param context: The send context.
-            The I{envelope} is the envelope docuemnt.
+            The I{envelope} is the envelope document.
         @type context: L{MessageContext}
         """
         pass
     
-    def sending(self, request):
+    def sending(self, context):
         """
         Suds will send the specified soap envelope.
         Provides the plugin with the opportunity to inspect/modify
         the message text it is sent.
         @param request: The request that is about to be sent.
-        @type request: L{Request}
+        @type request: L{RequestContext}
         """
         pass
     
@@ -198,6 +194,7 @@ class PluginContainer:
         'init': (InitContext, InitPlugin),
         'document': (DocumentContext, DocumentPlugin),
         'message': (MessageContext, MessagePlugin ),
+        'request': (RequestContext, MessagePlugin ),
     }
     
     def __init__(self, plugins):
