@@ -13,6 +13,8 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 # written by: Jeff Ortel ( jortel@redhat.com )
+#
+# Forked and modified by: Bill Healey ( bill@billhealey.com )
 
 """
 The I{2nd generation} service proxy provides access to web services.
@@ -631,9 +633,9 @@ class SoapClient:
             else:
                 soapenv = soapenv.plain()
             soapenv = soapenv.encode('utf-8')
-            plugins.message.sending(envelope=soapenv)
             request = Request(location, soapenv)
             request.headers = self.headers()
+            plugins.message.sending(request=request)
             reply = transport.send(request)
             ctx = plugins.message.received(reply=reply.message)
             reply.message = ctx.reply
